@@ -1,0 +1,7 @@
+# ignore all LLM files
+t5_*/
+# ignore all dataset files
+cnn_dailymail_full/
+
+# ignore all .pyc files
+*.pyc
