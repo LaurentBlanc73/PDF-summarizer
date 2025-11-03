@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, Input, Output, State, callback, no_update, callback_context
 import requests
 
-dash_app = Dash(__name__, suppress_callback_exceptions=True)
+dash_app = Dash(__name__, suppress_callback_exceptions=True, url_base_pathname="/dash/")
 
 ############################## layout ##############################
 dash_app.layout = html.Div(
@@ -137,7 +137,7 @@ def upload_file(upload_enabled, contents):
         return no_update
     if not upload_enabled:
         # call backend
-        url = "http://127.0.0.1:5000/extract-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
+        url = "http://127.0.0.1:8050/extract-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
         response = requests.post(url, json={"content": contents})
 
         if response.status_code == 200:  # success
@@ -189,7 +189,7 @@ def display_summary(upload_status, text):
     if text.startswith("Reason for failed upload: "):  # pdf upload failed, nothing to summarize
         summary_text = text
     else:
-        url = "http://127.0.0.1:5000/summarize-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
+        url = "http://127.0.0.1:8050/summarize-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
         response = requests.post(url, json={"text": text})
 
         if response.status_code == 200:
