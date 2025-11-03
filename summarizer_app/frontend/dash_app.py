@@ -1,6 +1,5 @@
 from dash import Dash, html, dcc, Input, Output, State, callback, no_update, callback_context
 import requests
-import pickle  # TODO: delete
 
 dash_app = Dash(__name__, suppress_callback_exceptions=True)
 
@@ -105,18 +104,12 @@ def disable_enable_upload(upload_enabled):
     Output("text", "data"),
     Input("upload-enabled", "data"),
     State("upload-file", "contents"),
-    # State("upload-file", "filename"),  # TODO: delete
     prevent_initial_call=True,
 )
 def upload_file(upload_enabled, contents):
     if upload_enabled:
         return no_update
-        # return html.Button("Choose File", id="upload-btn", className="upload-btn")
     if not upload_enabled:
-
-        # with open(f"{filename}.pkl", "wb") as f:  # TODO: delete
-        #    pickle.dump(contents, f)
-
         # call backend
         url = "http://127.0.0.1:5000/extract-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
         response = requests.post(url, json={"content": contents})
@@ -153,9 +146,7 @@ def upload_file(upload_enabled, contents):
     suppress_callback_exceptions=True,
 )
 def display_summary(upload_status, text):
-    # if upload_status["props"]["children"][0]["props"]["children"] != "✅":
-    #    return no_update
-    if isinstance(upload_status, html.Button):  # works -> delete lines above
+    if isinstance(upload_status, html.Button):
         return no_update
 
     if text.startswith("Reason for failed upload: "):  # pdf upload failed, nothing to summarize
@@ -188,87 +179,5 @@ def button_repeated_upload(upload_enabled):
     return no_update
 
 
-if __name__ == "__main__" and False:  # TODO: delete and False
+if __name__ == "__main__" and False:  # only needed for local testing
     dash_app.run(debug=True)
-
-
-# not needed: first implementation of uploading display
-"""
-@callback(
-    Output("upload-display", "children"),
-    Output("upload-state", "data"),
-    Output("spinner-activate", "data"),
-    # Input("upload-file", "filename"),
-    # Input("upload-file", "contents"),
-    prevent_initial_call=True,
-)
-def upload_display(filename, contents):
-    print("in upload display")
-    # render upload display during upload
-    return (
-        html.Div(
-            [
-                html.Div(
-                    [
-                        html.Img(src="/assets/pdf-icon.svg", className="pdf-icon", alt="PDF icon"),
-                        html.Span(filename, className="filename-text"),
-                    ],
-                    className="filename-box",
-                ),
-                dcc.Loading(
-                    id="spinner-upload",
-                    type="circle",
-                    children=html.Div(id="upload-status", style={"marginTop": "20px"}),
-                ),
-            ],
-            className="upload-box-content",
-        ),
-        "uploading",
-        True,
-    )
-"""
-
-# not needed: render depending on desktop or mobile
-"""
-@callback(
-    Output("upload-file", "children"),
-    # Output("upload-status", "children"),
-    Input("upload-file", "filename"),
-    Input("upload-file", "contents"),
-    State("platform-info", "data"),
-    prevent_initial_call=True,
-)
-def upload_file(filename, contents, platform):
-
-    print(filename)
-    # print(f"content: {contents}")
-
-    # display file uploading
-    if platform in ["Windows", "Darwin", "Linux"]:
-        # desktop
-        return html.Div(
-            [
-                html.Div(
-                    [
-                        html.Img(src="/assets/pdf-icon.svg", className="pdf-icon", alt="PDF icon"),
-                        html.Span(filename, className="filename-text"),
-                    ],
-                    className="filename-box",
-                ),
-                dcc.Loading(id="spinner-upload", type="circle", children=html.Div(id="upload-status")),
-            ],
-            className="upload-box-content",
-        )
-    else:
-        # mobile
-        return html.Div(
-            html.Div(
-                [
-                    html.Img(src="/assets/pdf-icon.svg", className="pdf-icon", alt="PDF icon"),
-                    html.Span(filename, className="filename-text"),
-                ],
-                className="filename-box",
-            ),
-            className="upload-box-content",
-        )
-"""
