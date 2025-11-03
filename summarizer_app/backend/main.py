@@ -8,6 +8,14 @@ api = Flask(__name__)
 
 @api.route("/extract-text", methods=["POST"])
 def extract_text():
+    """
+    Handles a POST request to extract text from a base64-encoded PDF file provided in the request JSON.
+    This endpoint expects a JSON payload with a single field:
+        - content (str): A data URI containing a base64-encoded PDF (must start with "data:application/pdf;base64,").
+    Returns:
+        Response: A JSON response containing a HTTP status code and either the extracted text or an error message.
+    """
+
     data = request.get_json()
 
     # validate data
@@ -40,6 +48,14 @@ def extract_text():
 
 @api.route("/summarize-text", methods=["POST"])
 def summarize_text():
+    """
+    Handles POST requests to summarize a given text.
+    This function expects a JSON payload with a single field:
+        - text (str): A text that needs to be summarized.
+    Returns:
+        Response: A JSON response containing a HTTP status code and either the summary or an error message.
+    """
+
     data = request.get_json()
 
     # validate data
