@@ -74,6 +74,14 @@ dash_app.layout = html.Div(
     prevent_initial_call=True,
 )
 def update_upload_text(filename):
+    """
+    Generates a Dash HTML component displaying the uploaded PDF filename and icon.
+    Args:
+        filename (str): The name of the uploaded PDF file.
+    Returns:
+        tuple: A tuple containing the HTML Div component and a boolean value (False).
+    """
+
     return (
         html.Div(
             [
@@ -93,6 +101,14 @@ def update_upload_text(filename):
     prevent_initial_call=True,
 )
 def disable_enable_upload(upload_enabled):
+    """
+    Returns the appropriate CSS class for the upload box based on its enabled state.
+    Args:
+        upload_enabled (bool): Flag indicating whether the upload box should be enabled.
+    Returns:
+        str: CSS class name(s) for the upload box.
+    """
+
     if upload_enabled:
         return "upload-box"
     else:
@@ -107,6 +123,16 @@ def disable_enable_upload(upload_enabled):
     prevent_initial_call=True,
 )
 def upload_file(upload_enabled, contents):
+    """
+    Handles file upload logic.
+    Args:
+        upload_enabled (bool): Flag indicating whether uploading is currently enabled.
+        contents (str): The contents of the file to be uploaded.
+    Returns:
+        tuple: (html.Div, str) where the first element is a status message and the second is either the
+            extracted text or an error message.
+    """
+
     if upload_enabled:
         return no_update
     if not upload_enabled:
@@ -146,6 +172,17 @@ def upload_file(upload_enabled, contents):
     suppress_callback_exceptions=True,
 )
 def display_summary(upload_status, text):
+    """
+    Generates and returns a summary for the provided text based on the upload status.
+    If the upload status indicates a failed PDF upload, returns the failure reason.
+    Otherwise, sends the text to a local summarization API and returns the summary or an error message.
+    Args:
+        upload_status: The status of the file upload, can be a Dash HTML Button or other status indicator.
+        text (str): The text to be summarized or an error message from a failed upload.
+    Returns:
+        tuple: A tuple containing the summary text, CSS classes for styling, header classes, and a boolean flag.
+    """
+
     if isinstance(upload_status, html.Button):
         return no_update
 
@@ -174,6 +211,14 @@ def display_summary(upload_status, text):
     prevent_initial_call=True,
 )
 def button_repeated_upload(upload_enabled):
+    """
+    Returns a file upload button component if uploading is enabled.
+    Args:
+        upload_enabled (bool): Flag indicating whether the upload button should be displayed.
+    Returns:
+        html.Button or no_update: The upload button component if enabled, otherwise a Dash no_update object.
+    """
+
     if upload_enabled:
         return html.Button("Choose File", id="upload-btn", className="upload-btn")
     return no_update
