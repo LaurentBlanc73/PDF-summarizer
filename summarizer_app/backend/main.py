@@ -76,10 +76,7 @@ def summarize_text():
     except ValueError as e:
         return jsonify({"error": str(e)}), 422  # Bad request
     except Exception as e:  # unexpected failure
-        return (
-            jsonify({"error": "Internal server error", "debug": e}),
-            500,
-        )  # Internal Server Error #TODO: delete "debug" key
+        return (jsonify({"error": "Internal server error"}), 500)  # Internal Server Error
 
 
 if __name__ == "__main__":
