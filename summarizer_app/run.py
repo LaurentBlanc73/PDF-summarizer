@@ -17,4 +17,4 @@ if __name__ == "__main__":
 
 # notes:
 # - this is only for dev
-# - for deploying on render, use wsgi (see information there)
+# - for deploying on render, use wsgi.py
