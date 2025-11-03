@@ -1,8 +1,18 @@
 from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-import os
 
 
 def generate_summary(text: str) -> str:
+    """
+    Generates a concise summary of the given input text using a finetuned T5 model.
+    Args:
+        text (str): The input text to be summarized.
+    Returns:
+        str: The generated summary as a string.
+    Raises:
+        ValueError: If the input is not of type `str`.
+        RuntimeError: If the model fails to load or if summary generation fails.
+    """
+
     # return empty string for empty input
     if text == "":
         return ""
