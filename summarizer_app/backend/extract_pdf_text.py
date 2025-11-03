@@ -6,7 +6,11 @@ import numpy as np
 
 def _get_headers_footers(pages: list) -> list:
     """
-    # get repeated lines (must be present on most pages)
+    Identifies and returns lines that are likely headers or footers by detecting repeated lines across multiple pages.
+    Args:
+        pages (list): A list of strings, each string represents the text of one page.
+    Returns:
+        list: A list of strings containing lines which are present on most of the pages.
     """
 
     # smallest page contains at least header/footer and takes least computing
@@ -34,6 +38,14 @@ def _get_headers_footers(pages: list) -> list:
 
 
 def _clean_pages(pages: list) -> list:
+    """
+    Cleans a list of PDF page texts by removing headers, footers, and non-content lines.
+    Args:
+        pages (list): A list of strings, where each string represents the text content of a PDF page.
+    Returns:
+        list: A list of cleaned page texts, with headers, footers, and non-content lines removed.
+    """
+
     # get header and footer lines
     if len(pages) > 1:
         headers_footers = _get_headers_footers(pages)
@@ -56,6 +68,17 @@ def _clean_pages(pages: list) -> list:
 
 
 def extract_pdf_text(content: str) -> str:
+    """
+    Extracts and cleans text from a PDF document provided as a base64-encoded string.
+    Args:
+        content (str): A string containing metadata and base64-encoded PDF data,
+            separated by a comma. The string should start with 'data:application/pdf;base64,'.
+    Returns:
+        str: The cleaned and concatenated text extracted from all pages of the PDF.
+    Raises:
+        ValueError: If the input is not a string, or if the input is corrupted (missing comma).
+    """
+
     # return empty string for empty input
     if content == "":
         return ""
