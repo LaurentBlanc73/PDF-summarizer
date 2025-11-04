@@ -1,5 +1,7 @@
-from dash import Dash, html, dcc, Input, Output, State, callback, no_update, callback_context
+from dash import Dash, html, dcc, Input, Output, State, callback, no_update
 import requests
+from flask import request
+from urllib.parse import urljoin
 
 dash_app = Dash(__name__, suppress_callback_exceptions=True, url_base_pathname="/dash/")
 
@@ -137,7 +139,7 @@ def upload_file(upload_enabled, contents):
         return no_update
     if not upload_enabled:
         # call backend
-        url = "http://127.0.0.1:8050/extract-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
+        url = urljoin(request.url_root, "extract-text")
         response = requests.post(url, json={"content": contents})
 
         if response.status_code == 200:  # success
@@ -189,7 +191,7 @@ def display_summary(upload_status, text):
     if text.startswith("Reason for failed upload: "):  # pdf upload failed, nothing to summarize
         summary_text = text
     else:
-        url = "http://127.0.0.1:8050/summarize-text"  # TODO: keep somewhere else? (maybe in a dedicated config file)
+        url = urljoin(request.url_root, "summarize-text")
         response = requests.post(url, json={"text": text})
 
         if response.status_code == 200:
