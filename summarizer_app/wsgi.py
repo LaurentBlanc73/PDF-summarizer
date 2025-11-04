@@ -5,7 +5,6 @@ from frontend.dash_app import dash_app
 
 # single callable WSGI app
 dash_app.init_app(api)
-# or dash_app.server = api # TODO: delete, not needed
 app = api
 
 
