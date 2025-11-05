@@ -1,0 +1,9 @@
+# ignore all LLM files (dev happens only local and final model will be hosted by HuggingFace)
+t5_*/
+# ignore all dataset files
+cnn_dailymail_full/
+
+# ignore python generated files
+*.pyc
+__pycache__/
+.pytest_cache/
