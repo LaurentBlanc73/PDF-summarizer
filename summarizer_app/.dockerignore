@@ -1,0 +1,10 @@
+# ignore python generated files
+*.pyc
+__pycache__/
+
+# ignore everything related to tests
+test_*.py
+.pytest_cache/
+
+# ignore development files
+run.py
