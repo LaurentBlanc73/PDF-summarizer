@@ -22,7 +22,7 @@ def generate_summary(text: str) -> str:
         raise ValueError(f"Input has wrong type. Should be str, was {type(text)}")
 
     # load model
-    model_folder = "LaurentBlanc/t5-small-finetuned"
+    model_folder = "LaurentBlanc/t5-efficient-mini-finetuned"
     try:
         model = AutoModelForSeq2SeqLM.from_pretrained(model_folder)
         tokenizer = AutoTokenizer.from_pretrained(model_folder)
