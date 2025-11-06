@@ -1,9 +1,38 @@
-from dash import Dash, html, dcc, Input, Output, State, callback, no_update
+import os
 import requests
-from flask import request
-from urllib.parse import urljoin
+from dash import Dash, html, dcc, Input, Output, State, callback, no_update
+from .MockResponse import MockResponse
 
-dash_app = Dash(__name__, suppress_callback_exceptions=True, url_base_pathname="/dash/")
+dash_app = Dash(__name__, suppress_callback_exceptions=True)
+server = dash_app.server
+
+
+############################### utils ###############################
+def call_backend(endpoint: str, json: dict) -> requests.Response:
+    """
+    Sends a POST request to the backend API with the specified endpoint and JSON.
+    Args:
+        endpoint (str): The API endpoint to call.
+        json (dict): The JSON to send in the POST request.
+    Returns:
+        requests.Response: The response object from the backend API or a mock response if backend is not configured or a request error occurs.
+    """
+
+    # get env variables
+    BACKEND_BASE_URL = os.getenv("BACKEND_BASE_URL")
+    print(BACKEND_BASE_URL)
+    if not BACKEND_BASE_URL:
+        response = MockResponse({"error": "Backend API is not configured on the server."}, 500)
+        return response
+
+    full_url = f"{BACKEND_BASE_URL}{endpoint}"
+    try:
+        response = requests.post(full_url, json=json)
+        return response
+    except requests.exceptions.RequestException as e:
+        response = MockResponse({"error": e}, 500)
+        return response
+
 
 ############################## layout ##############################
 dash_app.layout = html.Div(
@@ -69,6 +98,7 @@ dash_app.layout = html.Div(
 )
 
 
+############################# callbacks #############################
 @callback(
     Output("upload-box-text", "children"),
     Output("upload-enabled", "data", allow_duplicate=True),
@@ -139,8 +169,7 @@ def upload_file(upload_enabled, contents):
         return no_update
     if not upload_enabled:
         # call backend
-        url = urljoin(request.url_root, "extract-text")
-        response = requests.post(url, json={"content": contents})
+        response = call_backend(endpoint="/extract-text", json={"content": contents})
 
         if response.status_code == 200:  # success
             return (
@@ -191,8 +220,8 @@ def display_summary(upload_status, text):
     if text.startswith("Reason for failed upload: "):  # pdf upload failed, nothing to summarize
         summary_text = text
     else:
-        url = urljoin(request.url_root, "summarize-text")
-        response = requests.post(url, json={"text": text})
+        # call backend
+        response = call_backend(endpoint="/summarize-text", json={"text": text})
 
         if response.status_code == 200:
             summary_text = response.json()["summary"]
@@ -224,7 +253,3 @@ def button_repeated_upload(upload_enabled):
     if upload_enabled:
         return html.Button("Choose File", id="upload-btn", className="upload-btn")
     return no_update
-
-
-if __name__ == "__main__" and False:  # only needed for local testing
-    dash_app.run(debug=True)
