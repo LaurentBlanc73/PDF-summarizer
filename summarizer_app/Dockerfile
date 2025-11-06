@@ -10,5 +10,5 @@ COPY . .
 
 EXPOSE 8000
 
-# start gunicorn server w/ 1 worker to deal w/ limited memory in render
-CMD ["/bin/sh", "-c", "gunicorn -w 1 --bind 0.0.0.0:$PORT wsgi:app"]
+# start gunicorn server
+CMD ["/bin/sh", "-c", "gunicorn --bind 0.0.0.0:$PORT wsgi:app"]
