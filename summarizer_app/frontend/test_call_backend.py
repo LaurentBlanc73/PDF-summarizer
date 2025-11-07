@@ -56,6 +56,7 @@ def test_call_backend_success():
 
     # test expected behavior
     response = call_backend("/summarize-text", {"text": "value"})
+    assert response.json()["error"] == "OK"  # only for debugging GitHub Actions
     assert response.status_code == 200
     assert "summary" in response.json()
     assert isinstance(response.json()["summary"], str)
