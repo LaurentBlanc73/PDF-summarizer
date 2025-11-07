@@ -15,13 +15,15 @@ def call_backend(endpoint: str, json: dict) -> requests.Response:
 
     # get env variables
     BACKEND_BASE_URL = os.getenv("BACKEND_BASE_URL")
-    if not BACKEND_BASE_URL:
+    BACKEND_API_KEY = os.getenv("BACKEND_API_KEY")
+    if not BACKEND_BASE_URL or not BACKEND_API_KEY:
         response = MockResponse({"error": "Backend API is not configured on the server."}, 500)
         return response
 
-    full_url = f"{BACKEND_BASE_URL}{endpoint}"
     try:
-        response = requests.post(full_url, json=json)
+        full_url = f"{BACKEND_BASE_URL}{endpoint}"
+        headers = {"Authorization": f"Bearer {BACKEND_API_KEY}"}
+        response = requests.post(full_url, headers=headers, json=json)
         if response.status_code != 200:
             response = MockResponse(
                 {"error": f"Backend API is not configured correctly on the server. Error: {response.reason}"},
