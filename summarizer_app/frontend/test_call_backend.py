@@ -1,4 +1,3 @@
-# %%
 import os
 from dotenv import load_dotenv
 from .call_backend import call_backend
