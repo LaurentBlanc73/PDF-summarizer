@@ -28,4 +28,5 @@ jobs:
       - name: Run tests with pytest
         env:
           BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
+          BACKEND_API_KEY: ${{ secrets.BACKEND_API_KEY }}
         run: pytest
