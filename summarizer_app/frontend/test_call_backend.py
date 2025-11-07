@@ -10,6 +10,7 @@ def test_call_backend_missing_env_vars(monkeypatch):
     # missing env var
     if "BACKEND_BASE_URL" in os.environ:
         monkeypatch.delenv("BACKEND_BASE_URL")
+    if "BACKEND_API_KEY" in os.environ:
         monkeypatch.delenv("BACKEND_API_KEY")
     response = call_backend("/summarize-text", {"key": "value"})
     assert response.status_code == 500
