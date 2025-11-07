@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from .call_backend import call_backend
 
 
-def test_call_backend_error(monkeypatch):
+def test_call_backend_missing_env_var(monkeypatch):
     # load env
     load_dotenv()
 
@@ -13,6 +13,11 @@ def test_call_backend_error(monkeypatch):
     response = call_backend("/summarize-text", {"key": "value"})
     assert response.status_code == 500
     assert response.json() == {"error": "Backend API is not configured on the server."}
+
+
+def test_call_backend_wrong_env_var(monkeypatch):
+    # load env
+    load_dotenv()
 
     # wrong env var
     monkeypatch.setenv("BACKEND_BASE_URL", "http://invalid-url")
