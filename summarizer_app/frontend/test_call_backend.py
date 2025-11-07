@@ -8,6 +8,9 @@ def test_call_backend():
     load_dotenv()
     original_env = os.environ.copy()
 
+    # only for debugging GitHub Actions env issues
+    assert os.getenv("BACKEND_BASE_URL") is not None
+
     # missing env var
     if "BACKEND_BASE_URL" in os.environ:
         del os.environ["BACKEND_BASE_URL"]
