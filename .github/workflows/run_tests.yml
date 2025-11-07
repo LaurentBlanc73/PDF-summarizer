@@ -26,4 +26,6 @@ jobs:
           pip install pytest
 
       - name: Run tests with pytest
+        env:
+          BACKEND_BASE_URL: ${{ secrets.BACKEND_BASE_URL }}
         run: pytest
