@@ -20,6 +20,8 @@ def call_backend(endpoint: str, json: dict) -> requests.Response:
         response = MockResponse({"error": "Backend API is not configured on the server."}, 500)
         return response
 
+    if not endpoint.startswith("/"):
+        endpoint = f"/{endpoint}"
     try:
         full_url = f"{BACKEND_BASE_URL}{endpoint}"
         headers = {"Authorization": f"Bearer {BACKEND_API_KEY}"}
