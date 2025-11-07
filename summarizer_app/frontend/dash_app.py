@@ -1,37 +1,8 @@
-import os
-import requests
 from dash import Dash, html, dcc, Input, Output, State, callback, no_update
-from .MockResponse import MockResponse
+from .call_backend import call_backend
 
 dash_app = Dash(__name__, suppress_callback_exceptions=True)
 server = dash_app.server
-
-
-############################### utils ###############################
-def call_backend(endpoint: str, json: dict) -> requests.Response:
-    """
-    Sends a POST request to the backend API with the specified endpoint and JSON.
-    Args:
-        endpoint (str): The API endpoint to call.
-        json (dict): The JSON to send in the POST request.
-    Returns:
-        requests.Response: The response object from the backend API or a mock response if backend is not configured or a request error occurs.
-    """
-
-    # get env variables
-    BACKEND_BASE_URL = os.getenv("BACKEND_BASE_URL")
-    print(BACKEND_BASE_URL)
-    if not BACKEND_BASE_URL:
-        response = MockResponse({"error": "Backend API is not configured on the server."}, 500)
-        return response
-
-    full_url = f"{BACKEND_BASE_URL}{endpoint}"
-    try:
-        response = requests.post(full_url, json=json)
-        return response
-    except requests.exceptions.RequestException as e:
-        response = MockResponse({"error": e}, 500)
-        return response
 
 
 ############################## layout ##############################
@@ -118,7 +89,7 @@ def update_upload_text(filename):
         html.Div(
             [
                 html.Div(className="stretch-box"),
-                html.Img(src="/assets/pdf-icon.svg", className="pdf-icon", alt="PDF icon"),  # change
+                html.Img(src="/assets/pdf-icon.svg", className="pdf-icon", alt="PDF icon"),
                 html.Div(filename, className="filename-text"),
             ],
             className="filename-box",
