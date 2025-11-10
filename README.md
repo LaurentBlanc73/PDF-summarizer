@@ -3,6 +3,7 @@ A Webapplication that allows for uploading and summarizing PDF files.
 
 ## Project structure
 
+```bash
 PDF-summarizer
 ├── .github/workflows/      # GitHub Actions CI workflow for running tests
 ├── example_pdfs/           # collection of sample PDFs for testing the application
@@ -12,25 +13,25 @@ PDF-summarizer
     │   └── assets/         # assets of the frontend
     ├── run.py              # application entry point for local development
     ├── wsgi.py             # WSGI entry point for production servers
-    ├── requirements.txt    # Python dependencies
-    └── Dockerfile          # Instructions for building Docker image
+    ├── requirements.txt    # python dependencies
+    └── Dockerfile          # instructions for building Docker image
+```
 
 ## Getting started
 
 ### Clone the repository
 
-```
+```bash
 : Download repository
 git clone https://github.com/LaurentBlanc73/PDF-summarizer.git pdf_summarizer
 
-: Goto to downloaded folder 
+: Go to to downloaded folder 
 cd pdf_summarizer
-
 ```
 
 ### Docker Setup
 
-```
+```bash
 : Build Docker image
 cd summarizer_app
 docker build -t pdf-summarizer-frontend .
