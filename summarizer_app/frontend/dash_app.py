@@ -1,7 +1,7 @@
 from dash import Dash, html, dcc, Input, Output, State, callback, no_update
 from .call_backend import call_backend
 
-dash_app = Dash(__name__, suppress_callback_exceptions=True)
+dash_app = Dash(__name__, title="PDF Summarizer", suppress_callback_exceptions=True)
 server = dash_app.server
 
 
