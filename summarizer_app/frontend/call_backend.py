@@ -25,13 +25,21 @@ def call_backend(endpoint: str, json: dict) -> requests.Response:
     try:
         full_url = f"{BACKEND_BASE_URL}{endpoint}"
         headers = {"Authorization": f"Bearer {BACKEND_API_KEY}"}
-        response = requests.post(full_url, headers=headers, json=json)
+        response = requests.post(full_url, headers=headers, json=json, timeout=25)
         if response.status_code != 200:
             response = MockResponse(
-                {"error": f"Backend API is not configured correctly on the server. Error: {response.reason}"},
+                {"error": f"There was an error at the backend API. Error: {response.reason}"},
                 response.status_code,
             )
         return response
     except requests.exceptions.RequestException as e:
-        response = MockResponse({"error": "There was an error accessing the backend API."}, 500)
+        if isinstance(e, requests.exceptions.Timeout):
+            response = MockResponse(
+                {"error": "There was a timeout while accessing the backend API. Try again in a couple minutes."}, 504
+            )
+            return response
+        response = MockResponse({"error": f"There was an error accessing the backend API. Error: {e}"}, 500)
+        return response
+    except Exception as e:
+        response = MockResponse({"error": f"An unexpected error occurred. Error: {e}"}, 500)
         return response
