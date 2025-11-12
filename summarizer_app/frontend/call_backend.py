@@ -38,8 +38,8 @@ def call_backend(endpoint: str, json: dict) -> requests.Response:
                 {"error": "There was a timeout while accessing the backend API. Try again in a couple minutes."}, 504
             )
             return response
-        response = MockResponse({"error": f"There was an error accessing the backend API. Error: {e}"}, 500)
+        response = MockResponse({"error": f"There was an error accessing the backend API."}, 500)
         return response
     except Exception as e:
-        response = MockResponse({"error": f"An unexpected error occurred. Error: {e}"}, 500)
+        response = MockResponse({"error": f"An unexpected error occurred."}, 500)
         return response
