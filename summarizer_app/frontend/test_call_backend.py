@@ -25,7 +25,9 @@ def test_call_backend_wrong_env_backend_base_url(monkeypatch):
     monkeypatch.setenv("BACKEND_BASE_URL", "http://invalid-url")
     response = call_backend("/summarize-text", {"key": "value"})
     assert response.status_code == 500  # only True for clean test environment (not on local machine)
-    assert response.json() == {"error": "There was an error accessing the backend API."}
+    assert response.json() == {
+        "error": "There was an error accessing the backend API."
+    }  # only True for clean test environment (not on local machine)
 
 
 def test_call_backend_wrong_env_backend_api_key(monkeypatch):
