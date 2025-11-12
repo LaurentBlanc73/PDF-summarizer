@@ -36,7 +36,7 @@ def test_call_backend_wrong_env_backend_api_key(monkeypatch):
     monkeypatch.setenv("BACKEND_API_KEY", "dummy_api_key")
     response = call_backend("/summarize-text", {"key": "value"})
     assert response.status_code == 401
-    assert response.json() == {"error": "Backend API is not configured correctly on the server. Error: UNAUTHORIZED"}
+    assert response.json() == {"error": "There was an error at the backend API. Error: UNAUTHORIZED"}
 
 
 def test_call_backend_wrong_endpoint():
@@ -47,7 +47,7 @@ def test_call_backend_wrong_endpoint():
     response = call_backend("/wrong-endpoint", {"key": "value"})
     assert response.status_code == 404
     assert "error" in response.json()
-    assert "Backend API is not configured correctly on the server. Error: " in response.json()["error"]
+    assert "There was an error at the backend API. Error: " in response.json()["error"]
 
 
 def test_call_backend_success():
